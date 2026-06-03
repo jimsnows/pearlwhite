@@ -3,8 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 // ═══════════════════════════════════════════════════════════════
 // PEARL WHITE — СУВД-ЭРДЭНЭ
 // FOHOW 7 Carat Diamond | Wellness Landing Page
-// Single file — Vite React TSX
-// Fonts: Cormorant Garamond (display) + PT Sans (body/Cyrillic)
+// Fonts: Cormorant Garamond (display) + Lato (body/Cyrillic)
 // Design: One continuous gradient canvas, tarot card reveals
 // ═══════════════════════════════════════════════════════════════
 
@@ -12,18 +11,30 @@ import React, { useState, useEffect, useRef } from "react";
 // DESIGN TOKENS
 // ───────────────────────────────────────────
 const C = {
-  gold:      "#C8922A",
-  goldLight: "#E8C96B",
+  // Gold — pro luxury range #C69B3C–#D4AF37
+  gold:      "#C8962A",
+  goldLight: "#DDB94A",
+  goldDark:  "#A07820",
   amber:     "#C8793A",
-  cream:     "#FAF7F2",
-  text:      "#1A0F08",
-  textMid:   "#6B4A2A",
-  textMuted: "#A08060",
-  textLight: "#FAF7F2",
+
+  // Light section text (cream/honey backgrounds)
+  textDark:  "#1A0F08",   // deep warm almost-black — NOT pure black
+  textWarm:  "#3D2510",   // warm dark brown for body
+  textMid:   "#6B4028",   // warm mid brown
+  textMuted: "#8A6040",   // warm taupe for secondary
+
+  // Dark section text (amber/ember backgrounds)
+  textLight: "#FAF4EC",   // warm off-white — NOT pure white
+  textCream: "#F0E4D0",   // warm cream for body on dark
+  textDim:   "#C8A880",   // warm dim for muted on dark
+
+  // Accent
   jade:      "#A8C4B8",
+  cream:     "#FAF7F2",
 };
+
 const DISPLAY = "'Cormorant Garamond', Georgia, serif";
-const BODY    = "'PT Sans', 'Helvetica Neue', sans-serif";
+const BODY    = "'Lato', 'PT Sans', 'Helvetica Neue', sans-serif";
 
 // ───────────────────────────────────────────
 // DATA — PRODUCTS
@@ -296,7 +307,7 @@ type Page =
 function GlobalStyles() {
   return (
     <style>{`
-      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap');
       *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
       html{scroll-behavior:smooth;cursor:none;}
       body{
@@ -444,13 +455,13 @@ function Nav({go}:{go:(p:Page,id?:string)=>void}){
       position:"fixed",top:0,left:0,right:0,zIndex:200,
       padding:"20px 48px",
       display:"flex",alignItems:"center",justifyContent:"space-between",
-      background:atTop?"transparent":"rgba(250,247,242,0.88)",
+      background:atTop?"transparent":"rgba(250,247,242,0.92)",
       backdropFilter:atTop?"none":"blur(18px)",
-      borderBottom:atTop?"none":"1px solid rgba(200,146,42,0.1)",
+      borderBottom:atTop?"none":"1px solid rgba(200,146,42,0.12)",
       transform:hidden?"translateY(-100%)":"translateY(0)",
       transition:"transform 0.5s cubic-bezier(0.16,1,0.3,1),background 0.4s ease",
     }}>
-      <button onClick={()=>go("home")} style={{fontFamily:DISPLAY,fontSize:20,fontStyle:"italic",color:C.text,fontWeight:400,letterSpacing:1,background:"none",border:"none"}}>
+      <button onClick={()=>go("home")} style={{fontFamily:DISPLAY,fontSize:20,fontStyle:"italic",color:C.textDark,fontWeight:400,letterSpacing:1,background:"none",border:"none"}}>
         Pearl White
       </button>
       <div style={{display:"flex",gap:36,alignItems:"center"}}>
@@ -460,9 +471,9 @@ function Nav({go}:{go:(p:Page,id?:string)=>void}){
             onMouseLeave={e=>(e.currentTarget.style.color=C.textMid)}
           >{l}</button>
         ))}
-        <button onClick={()=>scrollTo("contact")} style={{fontFamily:BODY,fontSize:11,letterSpacing:2,color:C.textLight,background:C.text,border:"none",padding:"10px 22px",fontWeight:700,transition:"background 0.3s"}}
+        <button onClick={()=>scrollTo("contact")} style={{fontFamily:BODY,fontSize:11,letterSpacing:2,color:C.textLight,background:C.textDark,border:"none",padding:"10px 22px",fontWeight:700,transition:"background 0.3s"}}
           onMouseEnter={e=>(e.currentTarget.style.background=C.gold)}
-          onMouseLeave={e=>(e.currentTarget.style.background=C.text)}
+          onMouseLeave={e=>(e.currentTarget.style.background=C.textDark)}
         >ЗӨВЛӨГӨӨ АВАХ</button>
       </div>
     </nav>
@@ -513,16 +524,54 @@ function Lotus({color=C.gold}:{color?:string}){
 }
 
 // ───────────────────────────────────────────
-// MARQUEE
+// CHAPTER DIVIDER — replaces marquee
+// Elegant static strip, sacred energy
 // ───────────────────────────────────────────
-function Marquee({light=false}:{light?:boolean}){
-  const items=["СУВД-ЭРДЭНЭ","✦","PEARL WHITE","✦","ЦЭВЭРЛЭХ","✦","ТЭНЦВЭРЖҮҮЛЭХ","✦","НӨХӨН СЭРГЭЭХ","✦","ФЕНИКС","✦","FOHOW","✦","7 CARAT DIAMOND","✦","ИНЬ-ЯН","✦"];
-  const txt=[...items,...items].join("  ");
+function Divider({light=false}:{light?:boolean}){
+  const lineCol  = light ? "rgba(26,15,8,0.15)"       : "rgba(250,244,236,0.2)";
+  const textCol  = light ? C.textMuted                 : C.textDim;
+  const dotCol   = light ? C.gold                      : C.goldLight;
+  const words    = ["ЦЭВЭРЛЭХ","ТЭНЦВЭРЖҮҮЛЭХ","НӨХӨН СЭРГЭЭХ"];
   return(
-    <div style={{overflow:"hidden",padding:"12px 0",background:light?"rgba(250,247,242,0.1)":"rgba(26,15,8,0.16)",borderTop:"1px solid rgba(200,146,42,0.12)",borderBottom:"1px solid rgba(200,146,42,0.12)"}}>
-      <div style={{display:"inline-block",whiteSpace:"nowrap",animation:"marquee 65s linear infinite",fontFamily:BODY,fontSize:10,letterSpacing:4,fontWeight:700,color:light?C.textMid:"rgba(200,146,42,0.65)"}}>
-        {txt}&nbsp;&nbsp;&nbsp;&nbsp;{txt}
+    <div style={{
+      padding:"22px 48px",
+      display:"flex", alignItems:"center",
+      justifyContent:"center", gap:0,
+      borderTop:`1px solid ${lineCol}`,
+      borderBottom:`1px solid ${lineCol}`,
+      background: light
+        ? "rgba(250,244,236,0.08)"
+        : "rgba(26,15,8,0.12)",
+      backdropFilter:"blur(4px)",
+    }}>
+      {/* Left line */}
+      <div style={{flex:1,height:1,background:lineCol,maxWidth:120}}/>
+
+      {/* Words + dots */}
+      <div style={{
+        display:"flex", alignItems:"center",
+        gap:20, padding:"0 32px",
+      }}>
+        {words.map((w,i)=>(
+          <React.Fragment key={w}>
+            <span style={{
+              fontFamily:BODY, fontSize:9,
+              letterSpacing:4, color:textCol,
+              fontWeight:700, whiteSpace:"nowrap",
+            }}>{w}</span>
+            {i < words.length-1 && (
+              <span style={{
+                width:4, height:4, borderRadius:"50%",
+                background:dotCol, opacity:0.6,
+                display:"inline-block", flexShrink:0,
+              }}/>
+            )}
+          </React.Fragment>
+        ))}
       </div>
+
+      {/* Right line */}
+      <div style={{flex:1,height:1,background:lineCol,maxWidth:120}}/>
     </div>
   );
 }
@@ -562,30 +611,30 @@ function Hero({go}:{go:(p:Page)=>void}){
         <div style={{...fi(0.35),fontFamily:BODY,fontSize:10,letterSpacing:5,color:C.textMuted,marginBottom:26}}>
           FOHOW · 7 CARAT DIAMOND · МОНГОЛ
         </div>
-        <h1 style={{...fi(0.55),fontFamily:DISPLAY,fontSize:"clamp(62px,11vw,138px)",fontWeight:300,lineHeight:0.9,color:C.text,letterSpacing:-2,marginBottom:14}}>
+        <h1 style={{...fi(0.55),fontFamily:DISPLAY,fontSize:"clamp(62px,11vw,138px)",fontWeight:300,lineHeight:0.9,color:C.textDark,letterSpacing:-2,marginBottom:14}}>
           Pearl<br/><em style={{color:C.gold,fontStyle:"italic"}}>White</em>
         </h1>
         <div style={{...fi(0.75),fontFamily:DISPLAY,fontSize:18,fontStyle:"italic",color:C.textMuted,letterSpacing:3,marginBottom:44}}>
           Сувд-Эрдэнэ
         </div>
         <div style={{...fi(0.85),marginBottom:36}}><Lotus color={C.gold}/></div>
-        <p style={{...fi(0.95),fontFamily:BODY,fontSize:"clamp(13px,1.5vw,16px)",color:C.textMid,lineHeight:1.9,maxWidth:420,margin:"0 auto 18px"}}>
+        <p style={{...fi(0.95),fontFamily:BODY,fontSize:"clamp(14px,1.5vw,16px)",color:C.textWarm,lineHeight:1.9,maxWidth:420,margin:"0 auto 18px",fontWeight:300}}>
           Европын анагаах ухаан өвчнийг эмчилдэг.
         </p>
-        <p style={{...fi(1.05),fontFamily:DISPLAY,fontSize:"clamp(17px,2.2vw,26px)",color:C.text,lineHeight:1.5,maxWidth:480,margin:"0 auto 56px",fontStyle:"italic"}}>
+        <p style={{...fi(1.05),fontFamily:DISPLAY,fontSize:"clamp(18px,2.2vw,26px)",color:C.textDark,lineHeight:1.5,maxWidth:480,margin:"0 auto 56px",fontStyle:"italic"}}>
           "Дорнын уламжлал таныг эмчилдэг."
         </p>
         <div style={{...fi(1.15),display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap"}}>
           <button onClick={()=>document.getElementById("contact")?.scrollIntoView({behavior:"smooth"})}
-            style={{fontFamily:BODY,fontSize:11,letterSpacing:2.5,color:C.textLight,background:C.text,border:"none",padding:"14px 36px",fontWeight:700,transition:"background 0.3s,transform 0.2s"}}
+            style={{fontFamily:BODY,fontSize:11,letterSpacing:2.5,color:C.textLight,background:C.textDark,border:"none",padding:"14px 36px",fontWeight:700,borderRadius:2,transition:"background 0.3s,transform 0.2s"}}
             onMouseEnter={e=>{e.currentTarget.style.background=C.gold;e.currentTarget.style.transform="translateY(-2px)";}}
-            onMouseLeave={e=>{e.currentTarget.style.background=C.text;e.currentTarget.style.transform="translateY(0)";}}>
+            onMouseLeave={e=>{e.currentTarget.style.background=C.textDark;e.currentTarget.style.transform="translateY(0)";}}>
             ЗӨВЛӨГӨӨ АВАХ
           </button>
           <button onClick={()=>document.getElementById("cards-section")?.scrollIntoView({behavior:"smooth"})}
-            style={{fontFamily:BODY,fontSize:11,letterSpacing:2.5,color:C.textMid,background:"transparent",border:`1px solid rgba(26,15,8,0.2)`,padding:"14px 36px",transition:"all 0.3s"}}
+            style={{fontFamily:BODY,fontSize:11,letterSpacing:2.5,color:C.textMid,background:"transparent",border:`1px solid rgba(61,37,16,0.25)`,padding:"14px 36px",borderRadius:2,transition:"all 0.3s"}}
             onMouseEnter={e=>{e.currentTarget.style.borderColor=C.gold;e.currentTarget.style.color=C.gold;}}
-            onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(26,15,8,0.2)";e.currentTarget.style.color=C.textMid;}}>
+            onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(61,37,16,0.25)";e.currentTarget.style.color=C.textMid;}}>
             ДЭЛГЭРЭНГҮЙ
           </button>
         </div>
@@ -601,10 +650,10 @@ function Hero({go}:{go:(p:Page)=>void}){
 function Philosophy(){
   return(
     <section id="philosophy" style={{padding:"150px 0 110px",position:"relative",overflow:"hidden"}}>
-      <div style={{position:"absolute",left:"-1%",top:"6%",fontFamily:DISPLAY,fontSize:"clamp(70px,13vw,190px)",color:C.text,opacity:0.04,fontWeight:600,letterSpacing:-4,userSelect:"none",pointerEvents:"none",lineHeight:1}}>ФЕНИКС</div>
+      <div style={{position:"absolute",left:"-1%",top:"6%",fontFamily:DISPLAY,fontSize:"clamp(70px,13vw,190px)",color:C.textDark,opacity:0.04,fontWeight:600,letterSpacing:-4,userSelect:"none",pointerEvents:"none",lineHeight:1}}>ФЕНИКС</div>
       <div style={{maxWidth:1040,margin:"0 auto",padding:"0 48px"}}>
         <div className="pw-reveal"><Label text="ФИЛОСОФИ"/></div>
-        <h2 className="pw-reveal d1" style={{fontFamily:DISPLAY,fontSize:"clamp(36px,6.5vw,88px)",fontWeight:400,lineHeight:1.08,color:C.text,letterSpacing:-1,marginBottom:80,maxWidth:740}}>
+        <h2 className="pw-reveal d1" style={{fontFamily:DISPLAY,fontSize:"clamp(36px,6.5vw,88px)",fontWeight:400,lineHeight:1.08,color:C.textDark,letterSpacing:-1,marginBottom:80,maxWidth:740}}>
           Таны бие<br/><em style={{color:C.amber,fontStyle:"italic"}}>өөрийгөө эдгээх</em><br/>чадвартай.
         </h2>
         <div className="grid3" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"0 52px",paddingTop:52,borderTop:`1px solid rgba(26,15,8,0.1)`}}>
@@ -614,15 +663,15 @@ function Philosophy(){
             {n:"03",t:"Хүнийг бүтнээр эмчилдэг",b:"Орчин үеийн анагаах ухаан шинж тэмдгийг эмчилдэг. Дорнын уламжлал шалтгааныг устгадаг — таны бие, сэтгэл, эрч хүчийг нэгэн зэрэг.",d:"d3"},
           ].map((p,i)=>(
             <div key={i} className={`pw-reveal ${p.d}`}>
-              <div style={{fontFamily:DISPLAY,fontSize:54,color:C.gold,opacity:0.18,lineHeight:1,marginBottom:18,fontWeight:400}}>{p.n}</div>
-              <h3 style={{fontFamily:DISPLAY,fontSize:21,color:C.text,marginBottom:16,fontWeight:500,lineHeight:1.3}}>{p.t}</h3>
-              <p style={{fontFamily:BODY,fontSize:14,color:C.textMid,lineHeight:1.9}}>{p.b}</p>
+              <div style={{fontFamily:DISPLAY,fontSize:54,color:C.gold,opacity:0.22,lineHeight:1,marginBottom:18,fontWeight:400}}>{p.n}</div>
+              <h3 style={{fontFamily:DISPLAY,fontSize:22,color:C.textDark,marginBottom:16,fontWeight:500,lineHeight:1.3}}>{p.t}</h3>
+              <p style={{fontFamily:BODY,fontSize:15,color:C.textWarm,lineHeight:1.9,fontWeight:300}}>{p.b}</p>
             </div>
           ))}
         </div>
         <div className="pw-reveal" style={{marginTop:100,textAlign:"center",padding:"0 12%"}}>
           <Lotus color={C.amber}/>
-          <blockquote style={{fontFamily:DISPLAY,fontSize:"clamp(22px,3.5vw,42px)",fontWeight:400,fontStyle:"italic",color:C.text,lineHeight:1.5,marginTop:36}}>
+          <blockquote style={{fontFamily:DISPLAY,fontSize:"clamp(22px,3.5vw,42px)",fontWeight:400,fontStyle:"italic",color:C.textDark,lineHeight:1.5,marginTop:36}}>
             "Өвдвөл цус гүйхгүй.<br/>Цус гүйвэл өвдөхгүй."
           </blockquote>
           <div style={{fontFamily:BODY,fontSize:10,letterSpacing:4,color:C.textMuted,marginTop:20}}>— ДОРНЫН УЛАМЖЛАЛТ АНАГААХ УХААН</div>
@@ -641,9 +690,9 @@ function FohowBand(){
           <div>
             <div className="pw-reveal"><Label text="FOHOW ГЭЖ ЮУ ВЭ" light/></div>
             <h2 className="pw-reveal d1" style={{fontFamily:DISPLAY,fontSize:"clamp(28px,4.5vw,56px)",fontWeight:400,lineHeight:1.15,color:C.textLight,letterSpacing:-0.5,marginBottom:28}}>
-              Орчин үеийн шинжлэх ухаан,<br/><em style={{opacity:0.6}}>эртний мэргэн ухаан.</em>
+              Орчин үеийн шинжлэх ухаан,<br/><em style={{color:C.goldLight,opacity:0.85}}>эртний мэргэн ухаан.</em>
             </h2>
-            <p className="pw-reveal d2" style={{fontFamily:BODY,fontSize:15,color:C.textLight,opacity:0.65,lineHeight:1.9,maxWidth:430}}>
+            <p className="pw-reveal d2" style={{fontFamily:BODY,fontSize:16,color:C.textCream,opacity:0.78,lineHeight:1.9,maxWidth:430,fontWeight:300}}>
               1995 онд Хятадад үүсгэн байгуулагдсан. 86 гаруй улс оронд үйл ажиллагаа явуулдаг. Дорнын уламжлалт анагаах ухааныг орчин үеийн биотехнологитой хослуулсан цорын ганц брэнд.
             </p>
           </div>
@@ -1172,7 +1221,7 @@ export default function App(){
 
   const renderPage=()=>{
     switch(page){
-      case "home":       return <><Hero go={go}/><Marquee light/><Philosophy/><FohowBand/><Marquee/><WorldCards go={go}/><Testimonials/><Contact/><Footer go={go}/></>;
+      case "home":       return <><Hero go={go}/><Divider light/><Philosophy/><FohowBand/><Divider/><WorldCards go={go}/><Testimonials/><Contact/><Footer go={go}/>  </>;
       case "products":   return <ProductsPage go={go} onBack={()=>go("home")}/>;
       case "wellness":   return <WellnessPage go={go} onBack={()=>go("home")}/>;
       case "beauty":     return <ComingSoonPage title="Арьс Гоошрол" gradient="linear-gradient(160deg,#5A1A3A,#350F22,#180508)" accent="#E890B8" onBack={()=>go("home")}/>;
