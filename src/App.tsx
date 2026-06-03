@@ -661,19 +661,21 @@ function FohowBand(){
   );
 }
 
-// ── 5 WORLD CARDS ───────────────────────────
-function WorldCards({go}:{go:(p:Page)=>void}){
-  const [hov,setHov]=useState<number|null>(null);
-
-  const Card=({card,i}:{card:typeof CARDS[0];i:number})=>{
-    const isHov=hov===i;
-    return(
-      <div className="card-wrap">
-        <div className="card-inner" style={{transitionDelay:`${i*190}ms`}}>
-          <button
-            onClick={()=>go(card.page as Page)}
-            onMouseEnter={()=>setHov(i)}
-            onMouseLeave={()=>setHov(null)}
+// ── WORLD CARD ITEM — defined outside to prevent recreation on hover ──
+function WorldCard({card,i,hov,setHov,go}:{
+  card:typeof CARDS[0];i:number;
+  hov:number|null;
+  setHov:(v:number|null)=>void;
+  go:(p:Page)=>void;
+}){
+  const isHov=hov===i;
+  return(
+    <div className="card-wrap">
+      <div className="card-inner" style={{transitionDelay:`${i*190}ms`}}>
+        <button
+          onClick={()=>go(card.page as Page)}
+          onMouseEnter={()=>setHov(i)}
+          onMouseLeave={()=>setHov(null)}
             style={{
               width:"100%", aspectRatio:"3/4.4",
               background:"rgba(250,244,234,0.13)",
@@ -772,7 +774,11 @@ function WorldCards({go}:{go:(p:Page)=>void}){
         </div>
       </div>
     );
-  };
+}
+
+// ── 5 WORLD CARDS ───────────────────────────
+function WorldCards({go}:{go:(p:Page)=>void}){
+  const [hov,setHov]=useState<number|null>(null);
 
   return(
     <section id="cards-section" style={{padding:"110px 0 90px"}}>
@@ -785,13 +791,13 @@ function WorldCards({go}:{go:(p:Page)=>void}){
           {/* Row 1 — 3 cards */}
           <div className="cards-row1" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
             {CARDS.slice(0,3).map((card,i)=>(
-              <Card key={card.id} card={card} i={i}/>
+              <WorldCard key={card.id} card={card} i={i} hov={hov} setHov={setHov} go={go}/>
             ))}
           </div>
           {/* Row 2 — 2 cards centered */}
           <div className="cards-row2" style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:16,maxWidth:"66.5%",margin:"0 auto",width:"100%"}}>
             {CARDS.slice(3,5).map((card,i)=>(
-              <Card key={card.id} card={card} i={i+3}/>
+              <WorldCard key={card.id} card={card} i={i+3} hov={hov} setHov={setHov} go={go}/>
             ))}
           </div>
         </div>
