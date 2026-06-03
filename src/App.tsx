@@ -286,11 +286,11 @@ const SPA_ITEMS = [
 // DATA — 5 WORLD CARDS
 // ───────────────────────────────────────────
 const CARDS = [
-  { id:"supplements", title:"Бүтээгдэхүүн", sub:"Дотоод эдгэлт", desc:"Биеийн гүн тэнцвэрийг сэргээх байгалийн гаралтай бүтээгдэхүүнүүд.", page:"products", gradient:"linear-gradient(145deg,#2C5444,#1E3D32)", accent:"#7ECBA8", symbol:"🌿" },
-  { id:"wellness",    title:"Wellness Spa",  sub:"Гадна эдгэлт",  desc:"Массаж, дулаан эмчилгээ, цэгийн эмчилгээ — биеийн гадна тэнцвэр.",   page:"wellness",  gradient:"linear-gradient(145deg,#4A2A0A,#2A1500)", accent:"#E8A040", symbol:"⚡" },
-  { id:"beauty",      title:"Арьс Гоошрол", sub:"Гоо сайхан",    desc:"Байгалийн гаралтай арьс арчилгааны бүтээгдэхүүн. Гэрэлтсэн арьс.",   page:"beauty",    gradient:"linear-gradient(145deg,#5A1A3A,#350F22)", accent:"#E890B8", symbol:"🌸" },
-  { id:"nutrition",   title:"Хоол Тэжээл",  sub:"Жин бодисын солилцоо", desc:"Boss Tea болон бодисын солилцоог идэвхжүүлдэг бүтээгдэхүүнүүд.",  page:"nutrition", gradient:"linear-gradient(145deg,#1A3A5A,#0F2040)", accent:"#90C8F0", symbol:"☯" },
-  { id:"business",    title:"Бизнес Боломж",sub:"Хамтдаа өсөх",  desc:"Pearl White-тай хамт ажиллаж өөрийн амжилтын замыг эхлүүл.",        page:"business",  gradient:"linear-gradient(145deg,#7A4A1A,#4A2A08)", accent:"#F0C060", symbol:"◆" },
+  { id:"supplements", title:"Бүтээгдэхүүн", sub:"Дотоод эдгэлт", desc:"Биеийн гүн тэнцвэрийг сэргээх байгалийн гаралтай бүтээгдэхүүнүүд.", page:"products", accent:"#7ECBA8", tint:"rgba(46,120,80,0.22)",  border:"rgba(126,203,168,0.35)", glow:"rgba(126,203,168,0.18)", symbol:"🌿" },
+  { id:"wellness",    title:"Wellness Spa",  sub:"Гадна эдгэлт",  desc:"Массаж, дулаан эмчилгээ, цэгийн эмчилгээ — биеийн гадна тэнцвэр.",   page:"wellness",  accent:"#E8A040", tint:"rgba(180,100,20,0.22)", border:"rgba(232,160,64,0.35)", glow:"rgba(232,160,64,0.18)", symbol:"✦" },
+  { id:"beauty",      title:"Арьс Гоошрол", sub:"Гоо сайхан",    desc:"Байгалийн гаралтай арьс арчилгааны бүтээгдэхүүн. Гэрэлтсэн арьс.",   page:"beauty",    accent:"#E890B8", tint:"rgba(160,40,100,0.22)", border:"rgba(232,144,184,0.35)", glow:"rgba(232,144,184,0.18)", symbol:"🌸" },
+  { id:"nutrition",   title:"Хоол Тэжээл",  sub:"Жин бодисын солилцоо", desc:"Boss Tea болон бодисын солилцоог идэвхжүүлдэг бүтээгдэхүүнүүд.",  page:"nutrition", accent:"#90C8F0", tint:"rgba(30,80,150,0.22)",  border:"rgba(144,200,240,0.35)", glow:"rgba(144,200,240,0.18)", symbol:"☯" },
+  { id:"business",    title:"Бизнес Боломж",sub:"Хамтдаа өсөх",  desc:"Pearl White-тай хамт ажиллаж өөрийн амжилтын замыг эхлүүл.",        page:"business",  accent:"#F0C060", tint:"rgba(160,100,10,0.22)", border:"rgba(240,192,96,0.35)",  glow:"rgba(240,192,96,0.18)",  symbol:"◆" },
 ];
 
 // ───────────────────────────────────────────
@@ -524,54 +524,27 @@ function Lotus({color=C.gold}:{color?:string}){
 }
 
 // ───────────────────────────────────────────
-// CHAPTER DIVIDER — replaces marquee
-// Elegant static strip, sacred energy
+// MARQUEE — slow, calm, elegant
 // ───────────────────────────────────────────
-function Divider({light=false}:{light?:boolean}){
-  const lineCol  = light ? "rgba(26,15,8,0.15)"       : "rgba(250,244,236,0.2)";
-  const textCol  = light ? C.textMuted                 : C.textDim;
-  const dotCol   = light ? C.gold                      : C.goldLight;
-  const words    = ["ЦЭВЭРЛЭХ","ТЭНЦВЭРЖҮҮЛЭХ","НӨХӨН СЭРГЭЭХ"];
+function Marquee({light=false}:{light?:boolean}){
+  const items=["СУВД-ЭРДЭНЭ","✦","PEARL WHITE","✦","ЦЭВЭРЛЭХ","✦","ТЭНЦВЭРЖҮҮЛЭХ","✦","НӨХӨН СЭРГЭЭХ","✦","ФЕНИКС","✦","FOHOW","✦","7 CARAT DIAMOND","✦","ИНЬ-ЯН","✦"];
+  const txt=[...items,...items].join("   ");
   return(
     <div style={{
-      padding:"22px 48px",
-      display:"flex", alignItems:"center",
-      justifyContent:"center", gap:0,
-      borderTop:`1px solid ${lineCol}`,
-      borderBottom:`1px solid ${lineCol}`,
-      background: light
-        ? "rgba(250,244,236,0.08)"
-        : "rgba(26,15,8,0.12)",
-      backdropFilter:"blur(4px)",
+      overflow:"hidden", padding:"14px 0",
+      background:light?"rgba(250,244,236,0.08)":"rgba(26,15,8,0.14)",
+      borderTop:`1px solid ${light?"rgba(61,37,16,0.12)":"rgba(250,244,236,0.1)"}`,
+      borderBottom:`1px solid ${light?"rgba(61,37,16,0.12)":"rgba(250,244,236,0.1)"}`,
     }}>
-      {/* Left line */}
-      <div style={{flex:1,height:1,background:lineCol,maxWidth:120}}/>
-
-      {/* Words + dots */}
       <div style={{
-        display:"flex", alignItems:"center",
-        gap:20, padding:"0 32px",
+        display:"inline-block", whiteSpace:"nowrap",
+        animation:"marquee 90s linear infinite",
+        fontFamily:BODY, fontSize:10,
+        letterSpacing:5, fontWeight:400,
+        color:light?C.textMuted:C.textDim,
       }}>
-        {words.map((w,i)=>(
-          <React.Fragment key={w}>
-            <span style={{
-              fontFamily:BODY, fontSize:9,
-              letterSpacing:4, color:textCol,
-              fontWeight:700, whiteSpace:"nowrap",
-            }}>{w}</span>
-            {i < words.length-1 && (
-              <span style={{
-                width:4, height:4, borderRadius:"50%",
-                background:dotCol, opacity:0.6,
-                display:"inline-block", flexShrink:0,
-              }}/>
-            )}
-          </React.Fragment>
-        ))}
+        {txt}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{txt}
       </div>
-
-      {/* Right line */}
-      <div style={{flex:1,height:1,background:lineCol,maxWidth:120}}/>
     </div>
   );
 }
@@ -700,7 +673,7 @@ function FohowBand(){
             {[{n:"1995",l:"Үүсгэн байгуулагдсан"},{n:"86+",l:"Улс оронд"},{n:"30+",l:"Жилийн туршлага"},{n:"3",l:"Цэвэр · Тэнцвэр · Нөхөн"}].map((s,i)=>(
               <div key={i} className={`pw-reveal d${i+1}`} style={{padding:"34px 26px",background:"rgba(250,247,242,0.07)",backdropFilter:"blur(4px)",borderTop:"1px solid rgba(250,247,242,0.14)"}}>
                 <div style={{fontFamily:DISPLAY,fontSize:"clamp(30px,3.5vw,46px)",color:C.textLight,fontWeight:300,lineHeight:1,marginBottom:8}}>{s.n}</div>
-                <div style={{fontFamily:BODY,fontSize:11,color:C.textLight,opacity:0.45,letterSpacing:0.5}}>{s.l}</div>
+                <div style={{fontFamily:BODY,fontSize:11,color:C.textLight,opacity:0.82,letterSpacing:0.5}}>{s.l}</div>
               </div>
             ))}
           </div>
@@ -725,106 +698,106 @@ function WorldCard({card,i,hov,setHov,go}:{
           onClick={()=>go(card.page as Page)}
           onMouseEnter={()=>setHov(i)}
           onMouseLeave={()=>setHov(null)}
-            style={{
-              width:"100%", aspectRatio:"3/4.4",
-              background:"rgba(250,244,234,0.13)",
-              backdropFilter:"blur(24px)",
-              WebkitBackdropFilter:"blur(24px)",
-              border:`1px solid rgba(250,244,234,${isHov?0.35:0.18})`,
-              borderRadius:24,
-              display:"flex", flexDirection:"column",
-              justifyContent:"space-between",
-              padding:"0 0 28px",
-              position:"relative", overflow:"hidden",
-              transition:"transform 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.4s, box-shadow 0.5s",
-              transform:isHov?"translateY(-10px) scale(1.02)":"translateY(0) scale(1)",
-              boxShadow:isHov
-                ?`0 24px 60px rgba(0,0,0,0.25), inset 0 1px 0 rgba(250,244,234,0.3)`
-                :`0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(250,244,234,0.15)`,
-            }}
-          >
-            {/* Accent glow blob — unique per card */}
-            <div style={{
-              position:"absolute", top:"15%", left:"50%",
-              transform:"translateX(-50%)",
-              width:"70%", height:"45%",
-              borderRadius:"50%",
-              background:`radial-gradient(circle, ${card.accent}${isHov?"55":"30"} 0%, transparent 70%)`,
-              transition:"opacity 0.5s",
-              pointerEvents:"none",
-              filter:"blur(18px)",
-            }}/>
+          style={{
+            width:"100%", aspectRatio:"3/4.4",
+            background:isHov ? card.tint.replace("0.22)","0.32)") : card.tint,
+            backdropFilter:"blur(28px)",
+            WebkitBackdropFilter:"blur(28px)",
+            border:`1px solid ${isHov ? card.border.replace("0.35)","0.6)") : card.border}`,
+            borderRadius:20,
+            display:"flex", flexDirection:"column",
+            justifyContent:"space-between",
+            padding:"0 0 28px",
+            position:"relative", overflow:"hidden",
+            transition:"transform 0.5s cubic-bezier(0.16,1,0.3,1), border-color 0.4s, box-shadow 0.5s, background 0.4s",
+            transform:isHov?"translateY(-10px) scale(1.02)":"translateY(0) scale(1)",
+            boxShadow:isHov
+              ?`0 28px 56px rgba(0,0,0,0.2), 0 0 40px ${card.glow}`
+              :`0 8px 28px rgba(0,0,0,0.1)`,
+          }}
+        >
+          {/* Radial glow — unique per card */}
+          <div style={{
+            position:"absolute", top:"10%", left:"50%",
+            transform:"translateX(-50%)",
+            width:"80%", height:"50%",
+            borderRadius:"50%",
+            background:`radial-gradient(circle, ${card.glow.replace("0.18)","0.35)")} 0%, transparent 70%)`,
+            filter:"blur(20px)",
+            opacity:isHov?1:0.6,
+            transition:"opacity 0.5s",
+            pointerEvents:"none",
+          }}/>
 
-            {/* Top art zone */}
-            <div style={{
-              flex:1, display:"flex",
-              alignItems:"center", justifyContent:"center",
-              position:"relative", padding:"32px 20px 20px",
-            }}>
-              {/* Symbol with soft halo */}
+          {/* Art zone */}
+          <div style={{
+            flex:1, display:"flex",
+            alignItems:"center", justifyContent:"center",
+            position:"relative", padding:"32px 20px 20px",
+          }}>
+            {/* Symbol halo */}
+            <div style={{position:"relative",display:"flex",alignItems:"center",justifyContent:"center"}}>
               <div style={{
-                position:"relative",
-                display:"flex", alignItems:"center", justifyContent:"center",
-              }}>
-                <div style={{
-                  position:"absolute",
-                  width:80, height:80,
-                  borderRadius:"50%",
-                  background:`radial-gradient(circle, ${card.accent}${isHov?"40":"22"} 0%, transparent 70%)`,
-                  filter:"blur(10px)",
-                  transition:"opacity 0.4s",
-                }}/>
-                <div style={{
-                  fontSize:52,
-                  transition:"transform 0.5s cubic-bezier(0.16,1,0.3,1)",
-                  transform:isHov?"scale(1.18)":"scale(1)",
-                  position:"relative", zIndex:1,
-                }}>{card.symbol}</div>
-              </div>
+                position:"absolute", width:90, height:90,
+                borderRadius:"50%",
+                background:`radial-gradient(circle, ${card.border} 0%, transparent 70%)`,
+                filter:"blur(14px)",
+                opacity:isHov?0.9:0.5,
+                transition:"opacity 0.4s",
+              }}/>
+              <div style={{
+                fontSize:54,
+                position:"relative", zIndex:1,
+                filter:isHov?`drop-shadow(0 4px 12px ${card.accent})`:"none",
+                transition:"transform 0.5s cubic-bezier(0.16,1,0.3,1), filter 0.4s",
+                transform:isHov?"scale(1.2) translateY(-4px)":"scale(1)",
+              }}>{card.symbol}</div>
             </div>
+          </div>
 
-            {/* Divider */}
+          {/* Divider line */}
+          <div style={{
+            height:1,
+            background:`linear-gradient(to right, transparent, ${card.accent}60, transparent)`,
+            margin:"0 24px 22px",
+          }}/>
+
+          {/* Text zone */}
+          <div style={{padding:"0 24px"}}>
             <div style={{
-              height:1,
-              background:`linear-gradient(to right, transparent, ${card.accent}50, transparent)`,
-              margin:"0 24px 24px",
-            }}/>
+              fontFamily:BODY, fontSize:9,
+              letterSpacing:3.5, color:card.accent,
+              marginBottom:8, fontWeight:700,
+              opacity:0.9,
+            }}>{card.sub.toUpperCase()}</div>
 
-            {/* Text zone */}
-            <div style={{padding:"0 26px"}}>
-              <div style={{
-                fontFamily:BODY, fontSize:9,
-                letterSpacing:3, color:card.accent,
-                marginBottom:8, opacity:0.85,
-              }}>{card.sub.toUpperCase()}</div>
+            <div style={{
+              fontFamily:DISPLAY, fontSize:24,
+              color:C.textLight,
+              fontWeight:400, marginBottom:10, lineHeight:1.15,
+            }}>{card.title}</div>
 
-              <div style={{
-                fontFamily:DISPLAY, fontSize:24,
-                color:"rgba(250,244,234,0.95)",
-                fontWeight:400, marginBottom:10, lineHeight:1.15,
-              }}>{card.title}</div>
+            <p style={{
+              fontFamily:BODY, fontSize:13,
+              color:C.textCream,
+              lineHeight:1.75, marginBottom:18,
+              opacity:0.82,
+            }}>{card.desc}</p>
 
-              <p style={{
-                fontFamily:BODY, fontSize:12,
-                color:"rgba(250,244,234,0.55)",
-                lineHeight:1.7, marginBottom:18,
-              }}>{card.desc}</p>
-
-              <div style={{
-                display:"flex", alignItems:"center", gap:6,
-                fontFamily:BODY, fontSize:10, letterSpacing:2,
-                color:card.accent,
-                opacity:isHov?1:0.5,
-                transition:"all 0.35s",
-                transform:isHov?"translateX(6px)":"translateX(0)",
-              }}>ОРОХ →</div>
-            </div>
-          </button>
-        </div>
+            <div style={{
+              display:"flex", alignItems:"center", gap:6,
+              fontFamily:BODY, fontSize:10, letterSpacing:2,
+              color:card.accent, fontWeight:700,
+              opacity:isHov?1:0.55,
+              transition:"all 0.35s",
+              transform:isHov?"translateX(6px)":"translateX(0)",
+            }}>ОРОХ →</div>
+          </div>
+        </button>
       </div>
-    );
+    </div>
+  );
 }
-
 // ── 5 WORLD CARDS ───────────────────────────
 function WorldCards({go}:{go:(p:Page)=>void}){
   const [hov,setHov]=useState<number|null>(null);
@@ -874,7 +847,7 @@ function Testimonials(){
             <div key={i} className={`pw-reveal d${i+1}`} style={{paddingTop:i===1?44:0}}>
               <div style={{fontFamily:DISPLAY,fontSize:48,color:C.gold,opacity:0.22,lineHeight:0.8,marginBottom:18}}>"</div>
               <p style={{fontFamily:DISPLAY,fontSize:"clamp(14px,1.5vw,19px)",fontStyle:"italic",color:C.textLight,lineHeight:1.7,marginBottom:26}}>{t.q}</p>
-              <div style={{fontFamily:BODY,fontSize:13,color:C.textLight,opacity:0.55,marginBottom:4}}>{t.n}</div>
+              <div style={{fontFamily:BODY,fontSize:13,color:C.textLight,opacity:0.88,marginBottom:4}}>{t.n}</div>
               <div style={{fontFamily:BODY,fontSize:11,color:C.textLight,opacity:0.28}}>{t.d}</div>
             </div>
           ))}
@@ -925,7 +898,7 @@ function Contact(){
                 onMouseEnter={e=>{e.currentTarget.style.paddingLeft="14px";}}
                 onMouseLeave={e=>{e.currentTarget.style.paddingLeft="0";}}>
                 <div>
-                  <div style={{fontFamily:BODY,fontSize:10,letterSpacing:3,color:C.textLight,opacity:0.3,marginBottom:5}}>{c.label}</div>
+                  <div style={{fontFamily:BODY,fontSize:10,letterSpacing:3,color:C.textLight,opacity:0.70,marginBottom:5}}>{c.label}</div>
                   <div style={{fontFamily:DISPLAY,fontSize:22,color:C.textLight,fontWeight:400}}>{c.value}</div>
                 </div>
                 <div style={{width:36,height:36,borderRadius:"50%",border:"1px solid rgba(250,247,242,0.18)",display:"flex",alignItems:"center",justifyContent:"center",color:c.color,fontSize:14}}>→</div>
@@ -935,10 +908,10 @@ function Contact(){
         </div>
         <div className="pw-reveal" style={{marginTop:90,textAlign:"right"}}>
           <Lotus color="rgba(250,247,242,0.18)"/>
-          <blockquote style={{fontFamily:DISPLAY,fontSize:"clamp(14px,1.7vw,20px)",fontStyle:"italic",color:C.textLight,opacity:0.28,lineHeight:1.7,marginTop:24}}>
+          <blockquote style={{fontFamily:DISPLAY,fontSize:"clamp(14px,1.7vw,20px)",fontStyle:"italic",color:C.textLight,opacity:0.65,lineHeight:1.7,marginTop:24}}>
             "Феникс шатахаасаа айдаггүй —<br/>учир нь үнснээсээ дахин мэндлэхийг мэддэг."
           </blockquote>
-          <div style={{fontFamily:BODY,fontSize:10,letterSpacing:4,color:C.gold,opacity:0.45,marginTop:16}}>✦ PEARL WHITE ✦</div>
+          <div style={{fontFamily:BODY,fontSize:10,letterSpacing:4,color:C.gold,opacity:0.82,marginTop:16}}>✦ PEARL WHITE ✦</div>
         </div>
       </div>
     </section>
@@ -971,7 +944,7 @@ function CategoryHero({title,sub,tagline,gradient,accent,onBack}:{title:string;s
       <div style={{maxWidth:680,position:"relative",zIndex:1}}>
         <div style={{fontFamily:BODY,fontSize:10,letterSpacing:4,color:accent,marginBottom:18,opacity:0.85}}>{sub.toUpperCase()}</div>
         <h1 style={{fontFamily:DISPLAY,fontSize:"clamp(44px,8vw,96px)",fontWeight:300,lineHeight:0.92,color:C.textLight,letterSpacing:-2,marginBottom:22,animation:"fadeup 0.85s cubic-bezier(0.16,1,0.3,1) forwards"}}>{title}</h1>
-        <p style={{fontFamily:DISPLAY,fontSize:"clamp(15px,1.7vw,20px)",fontStyle:"italic",color:C.textLight,opacity:0.55,lineHeight:1.6}}>{tagline}</p>
+        <p style={{fontFamily:DISPLAY,fontSize:"clamp(15px,1.7vw,20px)",fontStyle:"italic",color:C.textLight,opacity:0.88,lineHeight:1.6}}>{tagline}</p>
       </div>
     </section>
   );
@@ -992,7 +965,7 @@ function ProductsPage({go,onBack}:{go:(p:Page,id?:string)=>void;onBack:()=>void}
               <div style={{fontSize:28}}>{p.emoji}</div>
               <div style={{textAlign:"left"}}>
                 <div style={{fontFamily:DISPLAY,fontSize:"clamp(20px,2.6vw,32px)",color:hov===i?p.accent:C.textLight,fontWeight:400,marginBottom:4,transition:"color 0.3s"}}>{p.name}</div>
-                <div style={{fontFamily:BODY,fontSize:11,color:C.textLight,opacity:0.3,letterSpacing:1}}>{p.sub}</div>
+                <div style={{fontFamily:BODY,fontSize:11,color:C.textLight,opacity:0.70,letterSpacing:1}}>{p.sub}</div>
               </div>
               <div className="prodesc" style={{fontFamily:BODY,fontSize:13,color:C.textLight,opacity:hov===i?0.62:0.32,lineHeight:1.7,textAlign:"left",transition:"opacity 0.3s"}}>{p.tagline}</div>
               <div className="prodtag" style={{fontFamily:BODY,fontSize:10,color:p.accent,letterSpacing:2,opacity:hov===i?1:0.38,transition:"all 0.3s",transform:hov===i?"translateX(5px)":"none",textAlign:"right"}}>ДЭЛГЭРЭНГҮЙ →</div>
@@ -1019,7 +992,7 @@ function WellnessPage({go,onBack}:{go:(p:Page,id?:string)=>void;onBack:()=>void}
               <div style={{fontSize:28}}>{s.emoji}</div>
               <div style={{textAlign:"left"}}>
                 <div style={{fontFamily:DISPLAY,fontSize:"clamp(20px,2.6vw,32px)",color:hov===i?s.accent:C.textLight,fontWeight:400,marginBottom:4,transition:"color 0.3s"}}>{s.name}</div>
-                <div style={{fontFamily:BODY,fontSize:11,color:C.textLight,opacity:0.3,letterSpacing:1}}>{s.sub}</div>
+                <div style={{fontFamily:BODY,fontSize:11,color:C.textLight,opacity:0.70,letterSpacing:1}}>{s.sub}</div>
               </div>
               <div className="prodesc" style={{fontFamily:BODY,fontSize:13,color:C.textLight,opacity:hov===i?0.62:0.32,lineHeight:1.7,textAlign:"left",transition:"opacity 0.3s"}}>{s.tagline}</div>
               <div className="prodtag" style={{fontFamily:BODY,fontSize:10,color:s.accent,letterSpacing:2,opacity:hov===i?1:0.38,transition:"all 0.3s",transform:hov===i?"translateX(5px)":"none",textAlign:"right"}}>ДЭЛГЭРЭНГҮЙ →</div>
@@ -1084,7 +1057,7 @@ function DetailPage({id,type,onBack}:{id:string;type:"product"|"spa";onBack:()=>
         <div style={{maxWidth:700,position:"relative",zIndex:1}}>
           <div style={{fontFamily:BODY,fontSize:10,letterSpacing:4,color:item.accent,marginBottom:20,opacity:0.85}}>{isSpa?"WELLNESS SPA":"БҮТЭЭГДЭХҮҮН"}</div>
           <h1 style={{fontFamily:DISPLAY,fontSize:"clamp(48px,9vw,116px)",fontWeight:300,lineHeight:0.9,color:C.textLight,letterSpacing:-2,marginBottom:14,animation:"fadeup 0.9s cubic-bezier(0.16,1,0.3,1) forwards"}}>{item.name}</h1>
-          <div style={{fontFamily:DISPLAY,fontSize:19,fontStyle:"italic",color:C.textLight,opacity:0.5,marginBottom:36}}>{item.sub}</div>
+          <div style={{fontFamily:DISPLAY,fontSize:19,fontStyle:"italic",color:C.textLight,opacity:0.85,marginBottom:36}}>{item.sub}</div>
           <p style={{fontFamily:DISPLAY,fontSize:"clamp(16px,1.9vw,22px)",fontStyle:"italic",color:C.textLight,opacity:0.78,lineHeight:1.55,maxWidth:540}}>{item.tagline}</p>
         </div>
       </section>
@@ -1181,7 +1154,7 @@ function DetailPage({id,type,onBack}:{id:string;type:"product"|"spa";onBack:()=>
             {prod.timeline.map((t,i)=>(
               <div key={i} className={`pw-reveal d${i+1}`} style={{padding:"18px 0",borderBottom:"1px solid rgba(250,247,242,0.06)"}}>
                 <div style={{fontFamily:DISPLAY,fontSize:15,color:item.accent,marginBottom:5}}>{t.period}</div>
-                <div style={{fontFamily:BODY,fontSize:13,color:C.textLight,opacity:0.5,lineHeight:1.6}}>{t.result}</div>
+                <div style={{fontFamily:BODY,fontSize:13,color:C.textLight,opacity:0.85,lineHeight:1.6}}>{t.result}</div>
               </div>
             ))}
           </div>
@@ -1221,7 +1194,7 @@ export default function App(){
 
   const renderPage=()=>{
     switch(page){
-      case "home":       return <><Hero go={go}/><Divider light/><Philosophy/><FohowBand/><Divider/><WorldCards go={go}/><Testimonials/><Contact/><Footer go={go}/>  </>;
+      case "home":       return <><Hero go={go}/><Marquee light/><Philosophy/><FohowBand/><Marquee/><WorldCards go={go}/><Testimonials/><Contact/><Footer go={go}/></>;
       case "products":   return <ProductsPage go={go} onBack={()=>go("home")}/>;
       case "wellness":   return <WellnessPage go={go} onBack={()=>go("home")}/>;
       case "beauty":     return <ComingSoonPage title="Арьс Гоошрол" gradient="linear-gradient(160deg,#5A1A3A,#350F22,#180508)" accent="#E890B8" onBack={()=>go("home")}/>;
