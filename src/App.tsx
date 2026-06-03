@@ -306,7 +306,7 @@ function GlobalStyles() {
           #6A3818 60%,#4A2810 68%,
           #3A1A08 78%,#C8601A 90%,#E8922A 100%
         );
-        background-attachment:fixed;
+        background-attachment: scroll;
         min-height:100vh;
         -webkit-font-smoothing:antialiased;
         overflow-x:hidden;
